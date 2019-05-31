@@ -1,0 +1,61 @@
+version: "2.1"
+services:
+  test-db-1:
+    container_name: test-db-1
+    image: postgres:latest
+    ports:
+      - 45432:5432
+    healthcheck:
+      test: "psql \"postgresql://$$POSTGRES_USER:$$POSTGRES_PASSWORD@localhost:5432/$$POSTGRES_DB\" -c 'SELECT 1;' && ! test -e /var/lib/postgresql/initdb.lock"
+      interval: 3s
+      retries: 10
+    volumes:
+      - ./db1:/database
+    environment:
+      - POSTGRES_DB=db1
+      - POSTGRES_USER=test_dba
+      - POSTGRES_PASSWORD=test_dba
+
+  test-db-2:
+    container_name: test-db-2
+    image: postgres:latest
+    ports:
+      - 55432:5432
+    healthcheck:
+      test: "psql \"postgresql://$$POSTGRES_USER:$$POSTGRES_PASSWORD@localhost:5432/$$POSTGRES_DB\" -c 'SELECT 1;' && ! test -e /var/lib/postgresql/initdb.lock"
+      interval: 3s
+      retries: 10
+    volumes:
+      - ./db2:/database
+    environment:
+      - POSTGRES_DB=db2
+      - POSTGRES_USER=test_dba
+      - POSTGRES_PASSWORD=test_dba
+
+  test-db-1-build:
+    container_name: test-db-1-build
+    build:
+      context: .
+      dockerfile: ./sqitch.db1.dockerfile
+    depends_on:
+      test-db-1:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=db1
+      - POSTGRES_USER=test_dba
+      - POSTGRES_PASSWORD=test_dba
+      - POSTGRES_URI=test-db-1
+
+  test-db-2-build:
+    container_name: test-db-2-build
+    build:
+      context: .
+      dockerfile: ./sqitch.db2.dockerfile
+    depends_on:
+      test-db-1:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=db2
+      - POSTGRES_USER=test_dba
+      - POSTGRES_PASSWORD=test_dba
+      - POSTGRES_URI=test-db-2

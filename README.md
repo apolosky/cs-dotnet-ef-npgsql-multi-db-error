@@ -1,0 +1,3 @@
+To re-scaffold da1: `dotnet ef dbcontext scaffold "Host=localhost;Username=test_dba;Password=test_dba;Database=db1;Port=15432" Npgsql.EntityFrameworkCore.PostgreSQL --context DA1Context --context-dir Context --output-dir Models --schema db1`
+
+To re-scaffold da2: `dotnet ef dbcontext scaffold "Host=localhost;Username=test_dba;Password=test_dba;Database=db2;Port=25432" Npgsql.EntityFrameworkCore.PostgreSQL --context DA2Context --context-dir Context --output-dir Models --schema db2`

@@ -1,0 +1,6 @@
+%syntax-version=1.0.0
+%project=db1
+%uri=https://github.com/sqitchers/sqitch-intro/db1/
+
+appschema 2019-05-31T15:21:30Z ,,, <apolosky@KBCUSTAPOLO1429> # Add schema
+table [appschema] 2019-05-31T15:25:04Z ,,, <apolosky@KBCUSTAPOLO1429> # Create base table
