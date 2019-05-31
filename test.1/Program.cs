@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using da1;
 using da2;
@@ -29,7 +30,16 @@ namespace test
 
             Console.WriteLine("Testing DA2");
             d2 = new DataAccess2("Host=localhost;Username=test_dba;Password=test_dba;Database=db2;Port=55432");
-            var d2_items = d2._GETALL().ToList();
+            IEnumerable<da2.Models.Table2> d2_items;
+            try
+            {
+                d2_items = d2._GETALL().ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw ex;
+            }
             Console.WriteLine("D2");
             Console.WriteLine(d2_items.First().Id);
             Console.WriteLine(d2_items.First().IdFromTable1);
